@@ -1,0 +1,26 @@
+# This is a placeholder for an actual MBTiles file
+# In a real deployment, replace this with your actual offline map data
+# 
+# MBTiles files are SQLite databases containing map tiles
+# They follow the MBTiles specification: https://github.com/mapbox/mbtiles-spec
+#
+# To create MBTiles files, you can use tools like:
+# - TileMill (by Mapbox)
+# - MOBAC (Mobile Atlas Creator) 
+# - QTiles (QGIS plugin)
+# - Custom scripts using libraries like TileStache
+#
+# For testing purposes, you can download sample MBTiles from:
+# - OpenMapTiles: https://openmaptiles.org/
+# - Natural Earth: https://www.naturalearthdata.com/
+# - Or create custom tiles from OpenStreetMap data
+#
+# File size: MBTiles files can be large (several GB) depending on:
+# - Geographic area covered
+# - Zoom level range (typically levels 1-18)
+# - Map style and detail level
+#
+# Once you have a real MBTiles file:
+# 1. Replace this placeholder file
+# 2. Ensure the filename matches what's referenced in CustomMapControl.cs
+# 3. Make sure the file is properly included in the project build

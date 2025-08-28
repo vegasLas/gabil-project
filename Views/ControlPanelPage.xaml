@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoligonMaui.Views.ControlPanelPage"
+             xmlns:vm="clr-namespace:PoligonMaui.ViewModels"
+             x:DataType="vm:ControlPanelViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="15">
+
+            <!-- Status Indicator -->
+            <Border BackgroundColor="Black" 
+                    Padding="15" 
+                    StrokeThickness="2">
+                <StackLayout Orientation="Horizontal" 
+                            Spacing="15">
+                    <Ellipse Fill="{Binding GpsStatusColor}" 
+                             WidthRequest="25" 
+                             HeightRequest="25"
+                             VerticalOptions="Center" />
+                    
+                    <Label Text="{Binding GpsStatusText}" 
+                           TextColor="White" 
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                </StackLayout>
+            </Border>
+
+            <!-- GPS Controls -->
+            <Border BackgroundColor="LightBlue" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="GPS CONNECTION" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <!-- COM Port Controls -->
+                    <Grid ColumnDefinitions="2*,*" 
+                          ColumnSpacing="10">
+                        <Entry Grid.Column="0"
+                               Text="{Binding ComPortName}" 
+                               Placeholder="COM Port (e.g., COM3)" />
+                        
+                        <Button Grid.Column="1"
+                                Text="COM GPS" 
+                                Command="{Binding StartComGpsCommand}"
+                                BackgroundColor="{Binding IsComGpsActive, Converter={StaticResource BoolToColorConverter}}"
+                                IsEnabled="{Binding IsComGpsActive, Converter={StaticResource InvertedBoolConverter}}" />
+                    </Grid>
+                    
+                    <!-- Simulation Controls -->
+                    <Button Text="SIMULATION" 
+                            Command="{Binding StartSimulationCommand}"
+                            BackgroundColor="{Binding IsSimulationActive, Converter={StaticResource BoolToColorConverter}}"
+                            IsEnabled="{Binding IsSimulationActive, Converter={StaticResource InvertedBoolConverter}}" />
+
+                    <!-- Stop Button -->
+                    <Button Text="STOP GPS" 
+                            Command="{Binding StopComGpsCommand}"
+                            BackgroundColor="Red"
+                            TextColor="White"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Map Controls -->
+            <Border BackgroundColor="LightGreen" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="MAP CONTROLS" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="FOLLOW GPS" 
+                                Command="{Binding ToggleAutoFollowCommand}"
+                                BackgroundColor="{Binding AutoFollowEnabled, Converter={StaticResource BoolToColorConverter}}" />
+                        
+                        <Button Grid.Column="1"
+                                Text="MANUAL CONTROL" 
+                                Command="{Binding ToggleAutoFollowCommand}"
+                                BackgroundColor="{Binding AutoFollowEnabled, Converter={StaticResource InvertedBoolToColorConverter}}" />
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="TURN BY MOVEMENT" 
+                                Command="{Binding ToggleMapRotationCommand}"
+                                BackgroundColor="{Binding RotateWithMovement, Converter={StaticResource BoolToColorConverter}}" />
+                        
+                        <Button Grid.Column="1"
+                                Text="FIXED NORTH" 
+                                Command="{Binding ToggleMapRotationCommand}"
+                                BackgroundColor="{Binding RotateWithMovement, Converter={StaticResource InvertedBoolToColorConverter}}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Target Controls -->
+            <Border BackgroundColor="LightCoral" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="TARGET CONTROLS" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <Button Text="RESET MARKS" 
+                            Command="{Binding ResetAllTargetsCommand}"
+                            BackgroundColor="Orange"
+                            TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Simulation Settings -->
+            <Border BackgroundColor="LightYellow" 
+                    Padding="15" 
+                    StrokeThickness="1"
+                    IsVisible="{Binding IsSimulationActive}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="SIMULATION SETTINGS" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <Grid ColumnDefinitions="*,2*" 
+                          RowDefinitions="Auto,Auto" 
+                          ColumnSpacing="10" 
+                          RowSpacing="5">
+                        
+                        <Label Grid.Row="0" Grid.Column="0" 
+                               Text="Speed (km/h):" 
+                               VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding SimulationSpeed}" 
+                               Keyboard="Numeric" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" 
+                               Text="Interval (ms):" 
+                               VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding SimulationInterval}" 
+                               Keyboard="Numeric" />
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="Update Speed" 
+                                Command="{Binding UpdateSimulationSpeedCommand}"
+                                FontSize="12" />
+                        
+                        <Button Grid.Column="1"
+                                Text="Update Interval" 
+                                Command="{Binding UpdateSimulationIntervalCommand}"
+                                FontSize="12" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Position and Target Info -->
+            <Border BackgroundColor="LightGray" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="POSITION & TARGET INFO" 
+                           FontSize="16" 
+                           FontAttributes="Bold" />
+                    
+                    <Label Text="Current Position:" 
+                           FontAttributes="Bold" 
+                           FontSize="12" />
+                    <Label Text="{Binding CurrentPosition}" 
+                           FontSize="10" 
+                           TextColor="DarkBlue" />
+                    
+                    <Label Text="{Binding NearestTargetName, StringFormat='Nearest Target: {0}'}" 
+                           FontAttributes="Bold" 
+                           FontSize="12" />
+                    
+                    <Label Text="{Binding DistanceToNearestTarget, StringFormat='Distance: {0:F0} meters'}" 
+                           FontSize="12" 
+                           TextColor="Red" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Status Messages -->
+            <Border BackgroundColor="DarkSlateGray" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="STATUS MESSAGES" 
+                           FontSize="14" 
+                           FontAttributes="Bold" 
+                           TextColor="White" />
+                    
+                    <Label Text="{Binding StatusMessage}" 
+                           FontSize="12" 
+                           TextColor="Lime" 
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Activity Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                              IsRunning="{Binding IsBusy}" 
+                              HorizontalOptions="Center"
+                              Color="Red"
+                              Scale="1.5" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

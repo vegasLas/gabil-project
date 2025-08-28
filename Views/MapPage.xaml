@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoligonMaui.Views.MapPage"
+             xmlns:vm="clr-namespace:PoligonMaui.ViewModels"
+             xmlns:controls="clr-namespace:PoligonMaui.Controls"
+             x:DataType="vm:MapViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="*,120">
+        
+        <!-- Map Container -->
+        <Border Grid.Row="0" 
+                BackgroundColor="LightGray" 
+                StrokeThickness="2" 
+                Stroke="DarkGray">
+            <Grid>
+                <!-- Mapsui Map Control -->
+                <controls:CustomMapControl x:Name="MapControl"
+                                         Targets="{Binding Targets}"
+                                         CurrentPosition="{Binding CurrentPosition}"
+                                         CurrentRoute="{Binding CurrentRoute}"
+                                         AutoFollow="{Binding AutoFollowEnabled}"
+                                         RotateWithMovement="{Binding RotateWithMovement}"
+                                         MapTapped="OnMapTapped" />
+                
+                <!-- Map overlay controls -->
+                <StackLayout Orientation="Horizontal" 
+                            HorizontalOptions="End" 
+                            VerticalOptions="Start"
+                            Margin="10"
+                            BackgroundColor="White"
+                            Opacity="0.9">
+                    
+                    <Button Text="🔍+" 
+                            Command="{Binding ZoomInCommand}"
+                            WidthRequest="40" 
+                            HeightRequest="40"
+                            FontSize="16" />
+                    
+                    <Button Text="🔍-" 
+                            Command="{Binding ZoomOutCommand}"
+                            WidthRequest="40" 
+                            HeightRequest="40"
+                            FontSize="16" />
+                    
+                    <Button Text="🎯" 
+                            Command="{Binding CenterOnCurrentPositionCommand}"
+                            WidthRequest="40" 
+                            HeightRequest="40"
+                            FontSize="16" />
+                </StackLayout>
+
+                <!-- Current Position Info -->
+                <Border HorizontalOptions="Start" 
+                        VerticalOptions="Start"
+                        Margin="10"
+                        BackgroundColor="White"
+                        Opacity="0.9"
+                        Padding="10">
+                    <StackLayout>
+                        <Label Text="Current Position:"
+                               FontAttributes="Bold"
+                               FontSize="12" />
+                        <Label Text="{Binding CurrentPosition, StringFormat='Lat: {0:F6}'}"
+                               FontSize="10" />
+                        <Label Text="{Binding CurrentPosition, StringFormat='Lon: {0:F6}'}"
+                               FontSize="10" />
+                    </StackLayout>
+                </Border>
+
+                <!-- Nearest Target Info -->
+                <Border HorizontalOptions="End" 
+                        VerticalOptions="End"
+                        Margin="10"
+                        BackgroundColor="Yellow"
+                        Opacity="0.9"
+                        Padding="10"
+                        IsVisible="{Binding NearestTarget, Converter={StaticResource IsNotNullConverter}}">
+                    <StackLayout>
+                        <Label Text="Nearest Target:"
+                               FontAttributes="Bold"
+                               FontSize="12" />
+                        <Label Text="{Binding NearestTarget.Name}"
+                               FontSize="11" />
+                        <Label Text="{Binding DistanceToTarget, StringFormat='Distance: {0:F0}m'}"
+                               FontSize="10" />
+                    </StackLayout>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Control Panel -->
+        <Border Grid.Row="1" 
+                BackgroundColor="DarkBlue" 
+                Padding="10">
+            <Grid ColumnDefinitions="*,*,*,*" 
+                  ColumnSpacing="10">
+                
+                <!-- Map Controls -->
+                <StackLayout Grid.Column="0" 
+                            Spacing="5">
+                    <Button Text="Auto Follow" 
+                            BackgroundColor="{Binding AutoFollowEnabled, Converter={StaticResource BoolToColorConverter}}"
+                            Command="{Binding ToggleAutoFollowCommand}"
+                            FontSize="10"
+                            HeightRequest="30" />
+                    
+                    <Button Text="Rotate Map" 
+                            BackgroundColor="{Binding RotateWithMovement, Converter={StaticResource BoolToColorConverter}}"
+                            Command="{Binding ToggleRotationModeCommand}"
+                            FontSize="10"
+                            HeightRequest="30" />
+                </StackLayout>
+
+                <!-- Target Controls -->
+                <StackLayout Grid.Column="1" 
+                            Spacing="5">
+                    <Button Text="Add Group" 
+                            Command="{Binding CreateTargetGroupCommand}"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            FontSize="10"
+                            HeightRequest="30" />
+                    
+                    <Button Text="Reset All" 
+                            Command="{Binding ResetAllTargetsCommand}"
+                            BackgroundColor="Red"
+                            TextColor="White"
+                            FontSize="10"
+                            HeightRequest="30" />
+                </StackLayout>
+
+                <!-- Status Info -->
+                <StackLayout Grid.Column="2" 
+                            Spacing="5">
+                    <Label Text="Targets:" 
+                           TextColor="White" 
+                           FontSize="10" />
+                    <Label Text="{Binding Targets.Count}" 
+                           TextColor="Yellow" 
+                           FontSize="14"
+                           FontAttributes="Bold" />
+                    
+                    <Label Text="Groups:" 
+                           TextColor="White" 
+                           FontSize="10" />
+                    <Label Text="{Binding TargetGroups.Count}" 
+                           TextColor="Yellow" 
+                           FontSize="14"
+                           FontAttributes="Bold" />
+                </StackLayout>
+
+                <!-- Messages -->
+                <StackLayout Grid.Column="3" 
+                            Spacing="5">
+                    <Label Text="Status:" 
+                           TextColor="White" 
+                           FontSize="10" />
+                    <Label Text="{Binding MapStatusMessage}" 
+                           TextColor="Lime" 
+                           FontSize="9"
+                           LineBreakMode="TailTruncation"
+                           MaxLines="3" />
+                </StackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Activity Indicator -->
+        <ActivityIndicator Grid.RowSpan="2"
+                          IsVisible="{Binding IsBusy}" 
+                          IsRunning="{Binding IsBusy}" 
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"
+                          Color="Red"
+                          Scale="2" />
+    </Grid>
+
+</ContentPage>

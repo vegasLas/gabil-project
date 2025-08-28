@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoligonMaui.Views.MainPage"
+             xmlns:vm="clr-namespace:PoligonMaui.ViewModels"
+             x:DataType="vm:MainViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            
+            <!-- Header -->
+            <Label Text="POLIGON MAUI" 
+                   FontSize="28" 
+                   FontAttributes="Bold"
+                   TextColor="Primary"
+                   HorizontalOptions="Center" />
+
+            <!-- Status Section -->
+            <Border BackgroundColor="LightGray" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Status Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold" />
+                    
+                    <Label Text="{Binding CurrentStatus}" 
+                           FontSize="14" />
+                    
+                    <Label Text="{Binding CurrentPosition}" 
+                           FontSize="12" 
+                           TextColor="DarkBlue" />
+                    
+                    <Label Text="{Binding StatusMessage}" 
+                           FontSize="12" 
+                           TextColor="Gray" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- GPS Controls -->
+            <Border BackgroundColor="LightBlue" 
+                    Padding="15" 
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="GPS Controls" 
+                           FontSize="18" 
+                           FontAttributes="Bold" />
+                    
+                    <Grid ColumnDefinitions="*,*" 
+                          ColumnSpacing="10">
+                        <Button Text="Start GPS" 
+                                Grid.Column="0"
+                                Command="{Binding StartGpsCommand}"
+                                IsEnabled="{Binding IsGpsActive, Converter={StaticResource InvertedBoolConverter}}" />
+                        
+                        <Button Text="Stop GPS" 
+                                Grid.Column="1"
+                                Command="{Binding StopGpsCommand}"
+                                IsEnabled="{Binding IsGpsActive}" />
+                    </Grid>
+                    
+                    <StackLayout Orientation="Horizontal" 
+                                 HorizontalOptions="Center">
+                        <Label Text="GPS Active:" 
+                               VerticalOptions="Center" />
+                        <Ellipse Fill="{Binding IsGpsActive, Converter={StaticResource BoolToColorConverter}}" 
+                                 WidthRequest="15" 
+                                 HeightRequest="15"
+                                 Margin="5,0" />
+                        
+                        <Label Text="Simulation:" 
+                               VerticalOptions="Center" 
+                               Margin="20,0,0,0" />
+                        <Ellipse Fill="{Binding IsSimulationActive, Converter={StaticResource BoolToColorConverter}}" 
+                                 WidthRequest="15" 
+                                 HeightRequest="15"
+                                 Margin="5,0" />
+                    </StackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Navigation Buttons -->
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Navigation" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" />
+                
+                <Button Text="📍 Open Map View" 
+                        FontSize="16"
+                        Command="{Binding NavigateToMapCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        HeightRequest="50" />
+                
+                <Button Text="🎛️ Control Panel" 
+                        FontSize="16"
+                        Command="{Binding NavigateToControlPanelCommand}"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        HeightRequest="50" />
+            </VerticalStackLayout>
+
+            <!-- Activity Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                              IsRunning="{Binding IsBusy}" 
+                              HorizontalOptions="Center"
+                              Color="Primary" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
